@@ -68,13 +68,22 @@ function filterJSON(data){
     //get data
     //backup the data
     var cleanTemplate = data;
+    var totalDistance = null;
     //coordinates array
     var coord = data.features[0].geometry.coordinates;
     for(var i = coord.length-1; i >= 1; i--){  
       var distance = cartoff.pointDistance({type: 'Point', coordinates:[coord[i][0], coord[i][1]]},
                   {type: 'Point', coordinates:[coord[i-1][0], coord[i-1][1]]})
+        console.log("Point A: " + coord[i][0] + " " + coord[i][0]);
+        console.log("Point B: " + coord[i-1][0] + " " + coord[i-1][0]);
         console.log("Distance(m):", distance);
+        console.log("")
+
+        if(distance < 20){
+          totalDistance += distance;
+        }
     }
+    console.log("Total Distance",totalDistance)
 };
 
 /*//these are [asdf,adf,adsf]
