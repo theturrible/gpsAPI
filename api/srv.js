@@ -66,26 +66,15 @@ server.get('/track/:name', function (req, res, next) {
 function filterJSON(data){
 
     //get data
-
-    console.log(data);
-  
+    //backup the data
     var cleanTemplate = data;
+    //coordinates array
     var coord = data.features[0].geometry.coordinates;
-
-    var newCoord = [];
-
-
-
     for(var i = coord.length-1; i >= 1; i--){  
       var distance = cartoff.pointDistance({type: 'Point', coordinates:[coord[i][0], coord[i][1]]},
                   {type: 'Point', coordinates:[coord[i-1][0], coord[i-1][1]]})
         console.log("Distance(m):", distance);
     }
-
-    
-
-
-
 };
 
 /*//these are [asdf,adf,adsf]
