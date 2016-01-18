@@ -1,6 +1,9 @@
 var restify = require('restify');
 var util = require('util'),fs = require('fs');
  
+var cartoff = require('geojson-utils');
+
+
 var server = restify.createServer({
   name: 'myapp',
   version: '1.0.0'
@@ -56,11 +59,49 @@ server.get('/track/:name', function (req, res, next) {
 	var util = require('util');
 	var kml = jsdom(fs.readFileSync('tracks/'+ req.params.name + '.gpx', 'utf8'));
 	var geoJSON = tj.gpx(kml);
+  filterJSON(geoJSON);
 	res.send(geoJSON);
 });
+
+function filterJSON(data){
+
+    //get data
+
+    console.log(data);
+  
+    var cleanTemplate = data;
+    var coord = data.features[0].geometry.coordinates;
+
+    var newCoord = [];
+
+
+
+    for(var i = coord.length-1; i >= 1; i--){  
+      var distance = cartoff.pointDistance({type: 'Point', coordinates:[coord[i][0], coord[i][1]]},
+                  {type: 'Point', coordinates:[coord[i-1][0], coord[i-1][1]]})
+        console.log("Distance(m):", distance);
+    }
+
+    
+
+
+
+};
+
+/*//these are [asdf,adf,adsf]
+function getFormatForDiff(coordA, coordB){
+  var [
+        {type: 'Point', coordinates:[coordA[0],coordA[1]},
+          {type: 'Point', coordinates:[coordB[0],coordB[1]}];
+}
+*/
+
+
 
 
 server.listen(8080, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+
 
